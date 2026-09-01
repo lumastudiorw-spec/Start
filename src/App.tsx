@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { BottomNav, type Tab } from './components/BottomNav'
 import { ContactsScreen } from './components/ContactsScreen'
+import { EyesOnMeScreen } from './components/EyesOnMeScreen'
 import { HistoryScreen } from './components/HistoryScreen'
+import { MapScreen } from './components/MapScreen'
 import { PrivacyScreen } from './components/PrivacyScreen'
 import { SettingsScreen } from './components/SettingsScreen'
-import { SosScreen } from './components/SosScreen'
+import { flushPendingAlerts } from './lib/flush'
 import {
   clearHistory,
   eraseAllData,
@@ -16,13 +18,12 @@ import {
 } from './lib/storage'
 import type { Contact, HistoryEntry, Settings } from './types'
 
+const VALID_TABS: Tab[] = ['alert', 'map', 'contacts', 'history', 'settings', 'privacy']
+
 function initialTab(): Tab {
   const params = new URLSearchParams(window.location.search)
   const tab = params.get('tab')
-  if (tab === 'sos' || tab === 'contacts' || tab === 'history' || tab === 'settings' || tab === 'privacy') {
-    return tab
-  }
-  return 'sos'
+  return (VALID_TABS as string[]).includes(tab ?? '') ? (tab as Tab) : 'alert'
 }
 
 export default function App() {
@@ -34,16 +35,24 @@ export default function App() {
   useEffect(() => saveContacts(contacts), [contacts])
   useEffect(() => saveSettings(settings), [settings])
 
+  useEffect(() => {
+    void flushPendingAlerts()
+    const onOnline = () => void flushPendingAlerts()
+    window.addEventListener('online', onOnline)
+    return () => window.removeEventListener('online', onOnline)
+  }, [])
+
   return (
     <div className="app">
       <main className="app-main">
-        {tab === 'sos' && (
-          <SosScreen
+        {tab === 'alert' && (
+          <EyesOnMeScreen
             contacts={contacts}
             settings={settings}
             onNeedsContacts={() => setTab('contacts')}
           />
         )}
+        {tab === 'map' && <MapScreen />}
         {tab === 'contacts' && <ContactsScreen contacts={contacts} onChange={setContacts} />}
         {tab === 'history' && (
           <HistoryScreen

@@ -22,7 +22,8 @@ export function HistoryScreen({ history, onClear }: Props) {
           <li key={h.id}>
             <strong>{new Date(h.timestamp).toLocaleString()}</strong>
             <div className="hint">
-              Sent to {h.contactCount} contact{h.contactCount === 1 ? '' : 's'} ·{' '}
+              {h.outcome === 'sent' ? 'Delivered' : h.outcome === 'queued' ? 'Was queued, retrying' : 'Cancelled'} ·{' '}
+              {h.contactCount} contact{h.contactCount === 1 ? '' : 's'} ·{' '}
               {h.latitude != null ? `location included (±${Math.round(h.accuracy ?? 0)}m)` : 'no location'}
             </div>
           </li>

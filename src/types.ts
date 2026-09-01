@@ -1,11 +1,14 @@
 export interface Contact {
   id: string
   name: string
+  /** Used for the one-tap share/SMS path. */
   phone: string
+  /** Used by the backend relay for the queued/silent-retry path. */
+  email: string
 }
 
 export interface Settings {
-  /** Seconds the SOS button stays cancelable before the alert fires. 0 = instant. */
+  /** Seconds the alert button stays cancelable before it fires. 0 = instant. */
   countdownSeconds: number
   /** Message template. Supports {name}, {time}, {location} placeholders. */
   messageTemplate: string
@@ -13,7 +16,7 @@ export interface Settings {
   emergencyNumber: string
 }
 
-export type AlertOutcome = 'sent' | 'cancelled'
+export type AlertOutcome = 'sent' | 'queued' | 'cancelled'
 
 export interface HistoryEntry {
   id: string

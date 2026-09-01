@@ -122,9 +122,10 @@ textarea {
 }
 
 .sos-main {
-  font-size: 44px;
+  font-size: 30px;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
+  line-height: 1.15;
 }
 
 .sos-count {
@@ -192,8 +193,18 @@ textarea {
   margin: 16px 0;
 }
 
+.map-canvas {
+  width: 100%;
+  height: 45vh;
+  min-height: 260px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin: 12px 0;
+}
+
 .field input,
 .field textarea,
+.field select,
 .contact-form input {
   background: var(--surface);
   border: 1px solid var(--border);

@@ -7,14 +7,20 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      // Custom service worker (src/sw.ts) instead of an auto-generated one,
+      // so it can register a Background Sync handler that flushes queued
+      // alerts once connectivity returns — even if the app isn't open.
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon.svg'],
       manifest: {
-        name: 'Guardian — Personal Safety',
-        short_name: 'Guardian',
+        name: 'Eyes on Me — Personal Safety',
+        short_name: 'Eyes on Me',
         description:
-          'A privacy-first personal safety app: no trackers, no ad SDKs, no server. Everything stays on your device except the alert you choose to send.',
-        theme_color: '#b3121c',
+          'A privacy-first personal safety app. Someone is watching over you: one tap sends your location to trusted contacts, and keeps trying until it gets through.',
+        theme_color: '#e2242f',
         background_color: '#0f0f10',
         display: 'standalone',
         start_url: '/',
@@ -35,14 +41,14 @@ export default defineConfig({
         ],
         shortcuts: [
           {
-            name: 'Send SOS',
-            short_name: 'SOS',
-            url: '/?tab=sos',
-            description: 'Jump straight to the SOS trigger',
+            name: 'Eyes on Me',
+            short_name: 'Alert',
+            url: '/?tab=alert',
+            description: 'Jump straight to the alert trigger',
           },
         ],
       },
-      workbox: {
+      injectManifest: {
         // App shell only — never cache anything containing contacts/location.
         globPatterns: ['**/*.{js,css,html,svg}'],
       },

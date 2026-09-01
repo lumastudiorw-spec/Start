@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
   <rect width="128" height="128" fill="#0f0f10"/>
-  <circle cx="64" cy="64" r="38" fill="#b3121c"/>
-  <text x="64" y="76" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">SOS</text>
+  <path d="M22 64C22 64 42 40 64 40C86 40 106 64 106 64C106 64 86 88 64 88C42 88 22 64 22 64Z" fill="none" stroke="#e2242f" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="64" cy="64" r="14" fill="#e2242f"/>
+  <circle cx="64" cy="64" r="5.5" fill="#0f0f10"/>
 </svg>

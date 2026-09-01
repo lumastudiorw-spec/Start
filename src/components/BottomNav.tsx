@@ -1,7 +1,8 @@
-export type Tab = 'sos' | 'contacts' | 'history' | 'settings' | 'privacy'
+export type Tab = 'alert' | 'map' | 'contacts' | 'history' | 'settings' | 'privacy'
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: 'sos', label: 'SOS' },
+  { id: 'alert', label: 'Alert' },
+  { id: 'map', label: 'Map' },
   { id: 'contacts', label: 'Contacts' },
   { id: 'history', label: 'History' },
   { id: 'settings', label: 'Settings' },
