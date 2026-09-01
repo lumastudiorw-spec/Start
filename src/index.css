@@ -1,0 +1,271 @@
+:root {
+  --bg: #0f0f10;
+  --surface: #1a1a1d;
+  --border: #2c2c30;
+  --text: #f2f1f4;
+  --text-dim: #9a99a2;
+  --danger: #e2242f;
+  --danger-dark: #b3121c;
+  --safe: #2fae5a;
+
+  color-scheme: dark;
+  font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-size: 22px;
+  margin: 0 0 4px;
+}
+
+h2 {
+  font-size: 16px;
+  margin: 24px 0 4px;
+  color: var(--text-dim);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.app {
+  min-height: 100svh;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 12px;
+}
+
+.screen {
+  padding: 20px 20px 32px;
+}
+
+.hint {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--danger);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+/* SOS screen */
+.sos-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-top: 40px;
+  min-height: 100%;
+}
+
+.location-badge {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.sos-button {
+  width: min(70vw, 260px);
+  height: min(70vw, 260px);
+  border-radius: 50%;
+  border: none;
+  background: radial-gradient(circle at 35% 30%, var(--danger), var(--danger-dark));
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 0 8px rgba(226, 36, 47, 0.12);
+  transition: transform 0.1s ease;
+}
+
+.sos-button:active {
+  transform: scale(0.97);
+}
+
+.sos-button.armed {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 8px rgba(226, 36, 47, 0.25); }
+  50% { box-shadow: 0 0 0 20px rgba(226, 36, 47, 0.05); }
+}
+
+.sos-main {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.sos-count {
+  font-size: 64px;
+  font-weight: 800;
+}
+
+.sos-sub {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.sent-panel {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 24px;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Buttons */
+.btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-outline {
+  background: transparent;
+}
+
+.btn-danger {
+  background: var(--danger-dark);
+  border-color: var(--danger-dark);
+  color: #fff;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+/* Forms */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 16px 0;
+}
+
+.field input,
+.field textarea,
+.contact-form input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.danger-zone {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Lists */
+.contact-list,
+.history-list,
+.privacy-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-list li,
+.history-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.privacy-list li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+/* Bottom nav */
+.bottom-nav {
+  display: flex;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.nav-item {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 12px 4px;
+  color: var(--text-dim);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.nav-item.active {
+  color: var(--danger);
+  font-weight: 600;
+}
