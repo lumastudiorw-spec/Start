@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 interface ChatMessage {
@@ -28,6 +29,7 @@ export default function InterviewChat({ token, status: initialStatus, currentQue
   const [inputValue, setInputValue] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleted, setDeleted] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -68,11 +70,30 @@ export default function InterviewChat({ token, status: initialStatus, currentQue
     }
   }
 
+  async function handleDelete() {
+    if (!window.confirm("Delete everything you've told us so far? This can't be undone.")) return;
+    try {
+      const res = await fetch(`/api/interview/${token}/delete`, { method: "POST" });
+      if (res.ok) setDeleted(true);
+      else setError("Couldn't delete right now — please try again.");
+    } catch {
+      setError("Couldn't reach the server — check your connection and try again.");
+    }
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = inputValue.trim();
     if (!trimmed) return;
     send(trimmed, false);
+  }
+
+  if (deleted) {
+    return (
+      <main className="flex min-h-dvh flex-col items-center justify-center gap-2 bg-zinc-50 px-6 text-center">
+        <p className="text-sm text-zinc-500">Done — everything you told us has been deleted.</p>
+      </main>
+    );
   }
 
   return (
@@ -160,6 +181,15 @@ export default function InterviewChat({ token, status: initialStatus, currentQue
           </div>
         </div>
       )}
+
+      <div className="flex justify-center gap-4 border-t border-zinc-200 bg-white py-2 text-xs text-zinc-400">
+        <Link href="/privacy" className="underline">
+          Privacy
+        </Link>
+        <button type="button" onClick={handleDelete} className="underline">
+          Delete my answers
+        </button>
+      </div>
     </div>
   );
 }

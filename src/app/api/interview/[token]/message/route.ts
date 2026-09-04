@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getInterviewByResumeToken } from "@/lib/db/interviews";
 import { InterviewApiError, processAnswer } from "@/lib/interviewEngine";
 import { describeCurrentQuestion } from "@/lib/interviewStateMachine";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 
 const BodySchema = z.object({
   answer: z.string().max(4000).optional().default(""),
@@ -11,6 +12,14 @@ const BodySchema = z.object({
 
 export async function POST(request: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
+
+  const [allowedByToken, allowedByIp] = await Promise.all([
+    checkRateLimit(`message:token:${token}`, 10 * 60, 60),
+    checkRateLimit(`message:ip:${getClientIp(request.headers)}`, 10 * 60, 150),
+  ]);
+  if (!allowedByToken || !allowedByIp) {
+    return NextResponse.json({ error: "Slow down a moment and try again shortly." }, { status: 429 });
+  }
 
   const parsedBody = BodySchema.safeParse(await request.json().catch(() => ({})));
   if (!parsedBody.success) {

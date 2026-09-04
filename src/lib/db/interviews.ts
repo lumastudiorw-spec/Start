@@ -109,6 +109,14 @@ export async function getInterviewByResumeToken(
   return { participant: participant as ParticipantRow, interview: interview as InterviewRow };
 }
 
+/** Deletes the participant and everything derived from their interview (cascades via FKs). */
+export async function deleteParticipantByToken(token: string): Promise<boolean> {
+  const db = getSupabaseAdmin();
+  const { data, error } = await db.from("participants").delete().eq("resume_token", token).select("id");
+  if (error) throw new Error(`Failed to delete participant: ${error.message}`);
+  return (data?.length ?? 0) > 0;
+}
+
 export async function getMessages(interviewId: string): Promise<MessageRow[]> {
   const db = getSupabaseAdmin();
   const { data, error } = await db
