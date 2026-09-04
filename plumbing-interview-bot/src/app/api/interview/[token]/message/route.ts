@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getInterviewByResumeToken } from "@/lib/db/interviews";
 import { InterviewApiError, processAnswer } from "@/lib/interviewEngine";
+import { describeCurrentQuestion } from "@/lib/interviewStateMachine";
 
 const BodySchema = z.object({
   answer: z.string().max(4000).optional().default(""),
@@ -32,6 +33,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
     return NextResponse.json({
       status: result.interview.status,
       currentStep: result.interview.current_step,
+      currentQuestion: describeCurrentQuestion(result.interview.state_json),
       isTerminal: result.isTerminal,
       messages: result.newMessages.map((m) => ({ role: m.role, content: m.content, questionId: m.question_id })),
     });

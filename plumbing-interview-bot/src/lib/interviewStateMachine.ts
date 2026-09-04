@@ -8,6 +8,7 @@ import {
   PROBLEM_DEEP_DIVE_STEP_PREFIXES,
   PROBLEM_DEEP_DIVE_TEMPLATE,
   QuestionDef,
+  StepKind,
   buildDeepDiveStepId,
   getFixedStep,
 } from "./questionBank";
@@ -135,6 +136,19 @@ export function getCurrentQuestion(state: InterviewRuntimeState): QuestionDef {
   }
 
   throw new Error(`Unknown step id: ${state.stepId}`);
+}
+
+export interface CurrentQuestionSummary {
+  id: string;
+  kind: StepKind;
+  skippable: boolean;
+}
+
+/** What the client needs to render the right input affordance — null once the interview has ended. */
+export function describeCurrentQuestion(state: InterviewRuntimeState): CurrentQuestionSummary | null {
+  if (isTerminal(state)) return null;
+  const { id, kind, skippable } = getCurrentQuestion(state);
+  return { id, kind, skippable };
 }
 
 export function canAskFollowUp(state: InterviewRuntimeState): boolean {

@@ -79,7 +79,11 @@ export async function startInterview(): Promise<{
   await saveInterviewState(interview.id, finalState);
   const savedMessages = await appendMessages(interview.id, messages);
 
-  return { resumeToken: participant.resume_token, interview: { ...interview, ...finalState, current_step: finalState.stepId, status: finalState.status }, messages: savedMessages };
+  return {
+    resumeToken: participant.resume_token,
+    interview: { ...interview, current_step: finalState.stepId, status: finalState.status, state_json: finalState },
+    messages: savedMessages,
+  };
 }
 
 export interface ProcessAnswerResult {
@@ -142,7 +146,11 @@ export async function processAnswer(params: {
       const [followUpMessage] = await appendMessages(interview.id, [
         { role: "bot", content: decision.followUpQuestion, question_id: question.id, is_follow_up: true, follow_up_index: nextState.followUpCount },
       ]);
-      return { interview: { ...interview, ...nextState }, newMessages: [followUpMessage], isTerminal: false };
+      return {
+        interview: { ...interview, current_step: nextState.stepId, status: nextState.status, state_json: nextState },
+        newMessages: [followUpMessage],
+        isTerminal: false,
+      };
     }
   }
 
@@ -172,7 +180,7 @@ export async function processAnswer(params: {
   const savedMessages = await appendMessages(interview.id, messages);
 
   return {
-    interview: { ...interview, ...finalState, current_step: finalState.stepId, status: finalState.status },
+    interview: { ...interview, current_step: finalState.stepId, status: finalState.status, state_json: finalState },
     newMessages: savedMessages,
     isTerminal: isTerminal(finalState),
   };
