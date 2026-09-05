@@ -71,17 +71,32 @@ function Wire({ settled, from, to, delayMs = 0 }: { settled: boolean; from: [Poi
   const dy = b.y - a.y;
   const length = Math.hypot(dx, dy);
   const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+  // The bar's own width (= length) varies per instance, so a plain absolute
+  // div would get re-centered by the flex parent's justify-content before
+  // the translate below is applied, shifting the visible bar by length / 2.
+  // A zero-size anchor sidesteps that: it centers to a single point exactly
+  // like the icon boxes do, then the bar is positioned explicitly inside it.
   return (
     <div
-      className="absolute h-[2px] origin-left rounded-full"
+      className="absolute h-0 w-0"
       style={{
-        width: length,
-        backgroundColor: COLORS.system,
-        opacity: 0.5,
-        transform: `translate(${a.x}px, ${a.y}px) rotate(${angle}deg)`,
-        transition: `transform 1.3s ease-in-out ${delayMs}ms, width 1.3s ease-in-out ${delayMs}ms`,
+        transform: `translate(${a.x}px, ${a.y}px)`,
+        transition: `transform 1.3s ease-in-out ${delayMs}ms`,
       }}
-    />
+    >
+      <div
+        className="absolute left-0 top-0 origin-left rounded-full"
+        style={{
+          width: length,
+          height: 2,
+          marginTop: -1,
+          backgroundColor: COLORS.system,
+          opacity: 0.5,
+          transform: `rotate(${angle}deg)`,
+          transition: `transform 1.3s ease-in-out ${delayMs}ms, width 1.3s ease-in-out ${delayMs}ms`,
+        }}
+      />
+    </div>
   );
 }
 
