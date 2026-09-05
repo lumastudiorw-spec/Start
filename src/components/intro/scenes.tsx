@@ -106,13 +106,17 @@ export interface Scene {
   durationMs: number;
   caption: string;
   render: (settled: boolean) => ReactNode;
+  audioSrc?: string;
 }
 
 export const SCENES: Scene[] = [
   // 1 — Introduction
   {
-    durationMs: 3000,
+    // Duration matches the recorded voiceover clip (3.73s) plus a short
+    // trailing pause before the scene advances.
+    durationMs: 4300,
     caption: "Hi, this is Marbury Studios.",
+    audioSrc: "/audio/intro/scene-01.m4a",
     render: (settled) => (
       <div className="flex h-full items-center justify-center">
         <Anim settled={settled} from={{ opacity: 0, scale: 0.9 }} to={{ opacity: 1, scale: 1 }}>
@@ -124,8 +128,10 @@ export const SCENES: Scene[] = [
 
   // 2 — What the company does
   {
-    durationMs: 5000,
+    // Recorded clip is 5.95s.
+    durationMs: 6600,
     caption: "We're a UK-based company that creates practical solutions to real-world problems.",
+    audioSrc: "/audio/intro/scene-02.m4a",
     render: (settled) => {
       const icons = [PhoneIcon, DocumentIcon, ClockIcon, MessageIcon, CalendarIcon];
       const scattered = [
@@ -153,9 +159,11 @@ export const SCENES: Scene[] = [
 
   // 3 — Current research focus
   {
-    durationMs: 7000,
+    // Recorded clip is 9.28s.
+    durationMs: 9900,
     caption:
       "We look for areas where people are losing time or relying on systems that could be simpler. One area we're researching now is the plumbing industry.",
+    audioSrc: "/audio/intro/scene-03.m4a",
     render: (settled) => (
       <div className="flex h-full items-center justify-center gap-6">
         <Anim
@@ -219,6 +227,7 @@ export const SCENES: Scene[] = [
     durationMs: 10000,
     caption:
       "Our aim is to take repetitive admin off plumbers' hands — from enquiries and job details to quotes and follow-ups.",
+    audioSrc: "/audio/intro/scene-04.m4a",
     render: (settled) => {
       const icons = [PhoneIcon, MessageIcon, DocumentIcon, ClockIcon];
       // Final state: one tidy row, deliberately never above y:-63 so nothing
@@ -271,6 +280,7 @@ export const SCENES: Scene[] = [
   {
     durationMs: 4500,
     caption: "Less repetitive admin.",
+    audioSrc: "/audio/intro/scene-05.m4a",
     render: (settled) => (
       <div className="relative flex h-full items-center justify-center gap-10">
         <Character role="plumber" leftArmAngle={-10} className="h-28 w-28" />
