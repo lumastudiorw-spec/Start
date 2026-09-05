@@ -18,5 +18,9 @@ export default async function NewInterviewPage() {
   }
 
   const { resumeToken } = await startInterview();
-  redirect(`/interview/${resumeToken}`);
+  // The confidentiality-warning message is already persisted by
+  // startInterview()'s auto-advance-through-statements logic, so the
+  // interview page can't tell "brand new" from "resumed" by message count
+  // alone (there's always at least one message). Mark freshness explicitly.
+  redirect(`/interview/${resumeToken}?intro=1`);
 }

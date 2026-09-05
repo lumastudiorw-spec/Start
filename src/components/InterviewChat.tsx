@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import IntroAnimation from "@/components/intro/IntroAnimation";
 
@@ -21,9 +22,13 @@ interface Props {
   status: "in_progress" | "completed" | "declined" | "abandoned";
   currentQuestion: CurrentQuestion | null;
   initialMessages: ChatMessage[];
+  /** True only right after /interview/new creates this interview — see that page for why message count can't tell us this. */
+  showIntro: boolean;
 }
 
-export default function InterviewChat({ token, status: initialStatus, currentQuestion: initialQuestion, initialMessages }: Props) {
+export default function InterviewChat({ token, status: initialStatus, currentQuestion: initialQuestion, initialMessages, showIntro }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [currentQuestion, setCurrentQuestion] = useState<CurrentQuestion | null>(initialQuestion);
   const [status, setStatus] = useState(initialStatus);
@@ -31,7 +36,7 @@ export default function InterviewChat({ token, status: initialStatus, currentQue
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deleted, setDeleted] = useState(false);
-  const [introDone, setIntroDone] = useState(initialMessages.length > 0);
+  const [introDone, setIntroDone] = useState(!showIntro);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -99,7 +104,14 @@ export default function InterviewChat({ token, status: initialStatus, currentQue
   }
 
   if (!introDone) {
-    return <IntroAnimation onDone={() => setIntroDone(true)} />;
+    return (
+      <IntroAnimation
+        onDone={() => {
+          setIntroDone(true);
+          router.replace(pathname); // drop ?intro=1 so a refresh right after finishing doesn't replay it
+        }}
+      />
+    );
   }
 
   return (
