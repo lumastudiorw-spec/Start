@@ -299,10 +299,10 @@ export const SCENES: Scene[] = [
           <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="-195 -110 390 220" preserveAspectRatio="xMidYMid meet">
             {xs.map((x, i) => (
               <g key={i} style={{ opacity: settled ? 0.6 : 0, transition: `opacity 0.6s ease-in-out ${500 + i * 150}ms` }}>
-                <line x1={x} y1={-35} x2={0} y2={-62} stroke={COLORS.system} strokeWidth={2} strokeDasharray="4 5" />
+                <line x1={x} y1={-18} x2={0} y2={-76} stroke={COLORS.system} strokeWidth={2} strokeDasharray="4 5" />
                 {settled && (
                   <circle r={3.5} fill={COLORS.system}>
-                    <animateMotion dur="1.6s" begin={`${0.8 + i * 0.35}s`} repeatCount="indefinite" path={`M ${x} -35 L 0 -62`} />
+                    <animateMotion dur="1.6s" begin={`${0.8 + i * 0.35}s`} repeatCount="indefinite" path={`M ${x} -18 L 0 -76`} />
                   </circle>
                 )}
               </g>
@@ -313,8 +313,8 @@ export const SCENES: Scene[] = [
             <Anim
               key={i}
               settled={settled}
-              from={{ opacity: 0, y: 15, x }}
-              to={{ opacity: 1, y: 0, x }}
+              from={{ opacity: 0, y: 25, x }}
+              to={{ opacity: 1, y: 18, x }}
               delayMs={i * 100}
               className="absolute flex flex-col items-center gap-3"
             >
@@ -323,9 +323,9 @@ export const SCENES: Scene[] = [
             </Anim>
           ))}
 
-          <Anim settled={settled} from={{ opacity: 0, scale: 0.5, y: -62 }} to={{ opacity: 1, scale: 1, y: -62 }} delayMs={500} className="absolute">
-            <div className={iconWrap}>
-              <ChartBoardIcon className="h-8 w-8" />
+          <Anim settled={settled} from={{ opacity: 0, scale: 0.5, y: -76 }} to={{ opacity: 1, scale: 1, y: -76 }} delayMs={500} className="absolute">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm">
+              <ChartBoardIcon className="h-6 w-6" />
             </div>
           </Anim>
         </div>
