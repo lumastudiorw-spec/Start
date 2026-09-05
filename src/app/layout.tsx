@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Plumbing admin research",
+  title: "Marbury Studio — Plumbing research",
   description: "A short research interview about plumbing business admin.",
 };
 

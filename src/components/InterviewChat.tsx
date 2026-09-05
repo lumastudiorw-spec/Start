@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import IntroVideoGate from "@/components/IntroVideoGate";
+import IntroAnimation from "@/components/intro/IntroAnimation";
 
 interface ChatMessage {
   role: "bot" | "user";
@@ -99,7 +99,7 @@ export default function InterviewChat({ token, status: initialStatus, currentQue
   }
 
   if (!introDone) {
-    return <IntroVideoGate onDone={() => setIntroDone(true)} />;
+    return <IntroAnimation onDone={() => setIntroDone(true)} />;
   }
 
   return (

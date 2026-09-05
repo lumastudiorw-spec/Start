@@ -1,7 +1,7 @@
-# Plumbing interview bot
+# Marbury Studio — plumbing interview bot
 
-Research MVP: a text-based conversational interview that asks UK plumbers
-and plumbing-business owners about how they currently handle enquiries,
+Research MVP: a conversational interview that asks UK plumbers and
+plumbing-business owners about how they currently handle enquiries,
 quoting and admin — to find out what's actually worth building, before
 anything gets built.
 
@@ -36,9 +36,12 @@ to Vercel.
   AI tagging prompt.
 - `supabase/migrations/` — SQL schema, applied manually via the Supabase
   SQL editor (see Setup above).
-- `public/video/intro.mp4` — the intro video shown before consent (see
-  `public/video/README.md`). Not committed yet; the app shows a "coming
-  soon" placeholder and a Continue button until it's added.
+- `src/components/intro/` — the Marbury Studio intro animation shown
+  before consent (10 scenes, ~76s, captions burned in as text since
+  there's no voiceover yet). Built entirely in code (SVG + CSS
+  transitions) rather than a rendered video file — `scenes.tsx` holds
+  the per-scene content/timing, `IntroAnimation.tsx` is the timeline
+  orchestrator.
 
 ## Commands
 
