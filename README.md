@@ -1,4 +1,4 @@
-# Marbury Studio — plumbing interview bot
+# Marbury Studios — plumbing interview bot
 
 Research MVP: a conversational interview that asks UK plumbers and
 plumbing-business owners about how they currently handle enquiries,
@@ -36,7 +36,7 @@ to Vercel.
   AI tagging prompt.
 - `supabase/migrations/` — SQL schema, applied manually via the Supabase
   SQL editor (see Setup above).
-- `src/components/intro/` — the Marbury Studio intro animation shown
+- `src/components/intro/` — the Marbury Studios intro animation shown
   before consent (10 scenes, ~76s, captions burned in as text since
   there's no voiceover yet). Built entirely in code (SVG + CSS
   transitions) rather than a rendered video file — `scenes.tsx` holds

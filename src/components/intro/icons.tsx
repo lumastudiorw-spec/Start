@@ -112,28 +112,3 @@ export function ContainerIcon({ color = COLORS.system, className }: IconProps) {
     </svg>
   );
 }
-
-/** The four pieces that assemble into the temporary "M" mark in scene 1. */
-export function MarkPieces({ settled }: { settled: boolean }) {
-  const pieces = [
-    { d: "M0 20 L10 0 L20 20 Z", from: { x: -60, y: -30 }, to: { x: 0, y: 10 } },
-    { d: "M0 0 L20 0 L20 20 L0 20 Z", from: { x: 60, y: -30 }, to: { x: 22, y: 10 } },
-    { d: "M0 20 A10 10 0 0 1 20 20 Z", from: { x: -60, y: 30 }, to: { x: 0, y: 22 } },
-    { d: "M0 0 A10 10 0 0 1 0 20 Z", from: { x: 60, y: 30 }, to: { x: 22, y: 22 } },
-  ];
-  return (
-    <svg viewBox="-40 -40 80 80" className="h-28 w-28">
-      {pieces.map((p, i) => (
-        <g
-          key={i}
-          style={{
-            transform: `translate(${settled ? p.to.x : p.from.x}px, ${settled ? p.to.y : p.from.y}px)`,
-            transition: "transform 1.6s cubic-bezier(0.22, 1, 0.36, 1)",
-          }}
-        >
-          <path d={p.d} fill={COLORS.system} />
-        </g>
-      ))}
-    </svg>
-  );
-}

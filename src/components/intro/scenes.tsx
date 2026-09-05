@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { COLORS } from "./palette";
 import { Character } from "./Character";
 import {
@@ -9,7 +10,6 @@ import {
   ContainerIcon,
   DocumentIcon,
   MagnifyingGlassIcon,
-  MarkPieces,
   MessageIcon,
   PhoneIcon,
   QuestionCardIcon,
@@ -65,10 +65,12 @@ export const SCENES: Scene[] = [
   // 1 — Introduction
   {
     durationMs: 5000,
-    caption: "Hi, this is Marbury Studio.",
+    caption: "Hi, this is Marbury Studios.",
     render: (settled) => (
       <div className="flex h-full items-center justify-center">
-        <MarkPieces settled={settled} />
+        <Anim settled={settled} from={{ opacity: 0, scale: 0.9 }} to={{ opacity: 1, scale: 1 }}>
+          <Image src="/brand/marbury-logo.png" alt="Marbury Studios" width={280} height={57} priority />
+        </Anim>
       </div>
     ),
   },
@@ -223,7 +225,7 @@ export const SCENES: Scene[] = [
     render: (settled) => (
       <div className="relative flex h-full items-center justify-center gap-10">
         {[0, 1, 2].map((i) => (
-          <Anim key={i} settled={settled} from={{ opacity: 1, y: 0 }} to={{ opacity: 0.3, y: -10 }} delayMs={i * 100} className="flex flex-col items-center gap-3">
+          <Anim key={i} settled={settled} from={{ opacity: 0, y: 15 }} to={{ opacity: 1, y: 0 }} delayMs={i * 100} className="flex flex-col items-center gap-3">
             <DocumentIcon className="h-10 w-10" />
             <Character role="plumber" className="h-20 w-20" />
           </Anim>
@@ -232,7 +234,7 @@ export const SCENES: Scene[] = [
           settled={settled}
           from={{ opacity: 0, scale: 0.5 }}
           to={{ opacity: 1, scale: 1 }}
-          delayMs={500}
+          delayMs={600}
           className="absolute -top-4"
         >
           <div className={iconWrap}>

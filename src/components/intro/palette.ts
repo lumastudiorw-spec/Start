@@ -1,4 +1,4 @@
-// Marbury Studio brand system for the intro animation. Locked per the
+// Marbury Studios brand system for the intro animation. Locked per the
 // creative brief — never use orange, never vary a character's colour.
 export const COLORS = {
   plumber: "#173B5E", // deep navy
