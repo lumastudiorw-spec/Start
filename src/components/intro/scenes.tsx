@@ -14,6 +14,7 @@ import {
   PhoneIcon,
   QuestionCardIcon,
 } from "./icons";
+import DecisionSplice from "./DecisionSplice";
 
 interface AnimState {
   opacity?: number;
@@ -249,26 +250,7 @@ export const SCENES: Scene[] = [
   {
     durationMs: 8000,
     caption: "Your answers directly influence what we build, what we prioritise, and what we leave out.",
-    render: (settled) => {
-      const lanes = [
-        { label: "BUILD", color: COLORS.system },
-        { label: "PRIORITISE", color: COLORS.plumber },
-        { label: "LEAVE OUT", color: COLORS.inactive },
-      ];
-      return (
-        <div className="flex h-full items-center justify-center gap-6">
-          {lanes.map((lane, i) => (
-            <Anim key={lane.label} settled={settled} from={{ opacity: 0, y: 20 }} to={{ opacity: 1, y: 0 }} delayMs={i * 150} className="flex flex-col items-center gap-2">
-              <div className="flex h-20 w-16 flex-col items-center justify-center gap-1.5 rounded-xl bg-white p-2 shadow-sm">
-                <div className="h-2.5 w-10 rounded" style={{ backgroundColor: lane.color }} />
-                <div className="h-2.5 w-8 rounded" style={{ backgroundColor: lane.color }} />
-              </div>
-              <span className="text-[10px] font-semibold tracking-wide text-zinc-600">{lane.label}</span>
-            </Anim>
-          ))}
-        </div>
-      );
-    },
+    render: (settled) => <DecisionSplice active={settled} />,
   },
 
   // 9 — Research and privacy
