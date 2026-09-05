@@ -36,3 +36,24 @@ body {
     transform: translateY(-4px);
   }
 }
+
+/* The "final product" card landing in DecisionSplice — a deliberate pop
+   with a brief glow, not just a fade, since this is the payoff moment of
+   the whole splice sequence. */
+@keyframes marbury-pop-in {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+    box-shadow: 0 0 0 0 rgba(21, 166, 161, 0);
+  }
+  55% {
+    transform: scale(1.18);
+    opacity: 1;
+    box-shadow: 0 0 28px 10px rgba(21, 166, 161, 0.45);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+}

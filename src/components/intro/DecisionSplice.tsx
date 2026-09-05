@@ -66,19 +66,27 @@ function Group({ group, stage }: { group: "build" | "prioritise" | "leaveOut"; s
   );
 }
 
-/** What build + prioritise converge into — one card, not two overlapping ones. */
+/** What build + prioritise converge into — the payoff moment, so it lands with a pop, not a plain fade. */
 function MergedBlock({ visible }: { visible: boolean }) {
   return (
-    <div
-      className="absolute flex h-20 w-16 flex-col items-center justify-center gap-1.5 rounded-xl bg-white p-2 shadow-sm"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: `scale(${visible ? 1 : 0.85})`,
-        transition: "opacity 0.9s ease-in-out 0.5s, transform 0.9s ease-in-out 0.5s",
-      }}
-    >
-      <div className="h-2.5 w-10 rounded" style={{ backgroundColor: COLORS.plumber }} />
-      <div className="h-2.5 w-10 rounded" style={{ backgroundColor: COLORS.system }} />
+    <div className="absolute flex flex-col items-center gap-2">
+      <div
+        className="flex h-20 w-16 flex-col items-center justify-center gap-1.5 rounded-xl bg-white p-2"
+        style={
+          visible
+            ? { animation: "marbury-pop-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both" }
+            : { opacity: 0, transform: "scale(0.4)" }
+        }
+      >
+        <div className="h-2.5 w-10 rounded" style={{ backgroundColor: COLORS.plumber }} />
+        <div className="h-2.5 w-10 rounded" style={{ backgroundColor: COLORS.system }} />
+      </div>
+      <span
+        className="text-[10px] font-bold tracking-wide text-zinc-700"
+        style={{ opacity: visible ? 1 : 0, transition: "opacity 0.7s ease-in-out 1.3s" }}
+      >
+        FINAL PRODUCT
+      </span>
     </div>
   );
 }

@@ -193,7 +193,7 @@ export const SCENES: Scene[] = [
 
   // 5 — The proposed direction
   {
-    durationMs: 7000,
+    durationMs: 4500,
     caption: "Less repetitive admin.",
     render: (settled) => (
       <div className="relative flex h-full items-center justify-center gap-10">
@@ -225,27 +225,48 @@ export const SCENES: Scene[] = [
   {
     durationMs: 8000,
     caption: "That's why we're asking you a few short questions.",
-    render: (settled) => (
-      <div className="relative flex h-full items-center justify-center gap-10">
-        {[0, 1, 2].map((i) => (
-          <Anim key={i} settled={settled} from={{ opacity: 0, y: 15 }} to={{ opacity: 1, y: 0 }} delayMs={i * 100} className="flex flex-col items-center gap-3">
-            <DocumentIcon className="h-10 w-10" />
-            <Character role="plumber" className="h-20 w-20" />
+    render: (settled) => {
+      const xs = [-110, 0, 110];
+      return (
+        <div className="relative flex h-full items-center justify-center">
+          {/* Connecting lines with a flowing dot on each — data moving from
+              each person up into the central collection point above them,
+              not just a disconnected icon floating over one person. */}
+          <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="-195 -110 390 220" preserveAspectRatio="xMidYMid meet">
+            {xs.map((x, i) => (
+              <g key={i} style={{ opacity: settled ? 0.6 : 0, transition: `opacity 0.6s ease-in-out ${500 + i * 150}ms` }}>
+                <line x1={x} y1={-35} x2={0} y2={-90} stroke={COLORS.system} strokeWidth={2} strokeDasharray="4 5" />
+                {settled && (
+                  <circle r={3.5} fill={COLORS.system}>
+                    <animateMotion dur="1.6s" begin={`${0.8 + i * 0.35}s`} repeatCount="indefinite" path={`M ${x} -35 L 0 -90`} />
+                  </circle>
+                )}
+              </g>
+            ))}
+          </svg>
+
+          {xs.map((x, i) => (
+            <Anim
+              key={i}
+              settled={settled}
+              from={{ opacity: 0, y: 15, x }}
+              to={{ opacity: 1, y: 0, x }}
+              delayMs={i * 100}
+              className="absolute flex flex-col items-center gap-3"
+            >
+              <DocumentIcon className="h-10 w-10" />
+              <Character role="plumber" className="h-20 w-20" />
+            </Anim>
+          ))}
+
+          <Anim settled={settled} from={{ opacity: 0, scale: 0.5, y: -90 }} to={{ opacity: 1, scale: 1, y: -90 }} delayMs={500} className="absolute">
+            <div className={iconWrap}>
+              <ChartBoardIcon className="h-8 w-8" />
+            </div>
           </Anim>
-        ))}
-        <Anim
-          settled={settled}
-          from={{ opacity: 0, scale: 0.5 }}
-          to={{ opacity: 1, scale: 1 }}
-          delayMs={600}
-          className="absolute -top-4"
-        >
-          <div className={iconWrap}>
-            <ChartBoardIcon className="h-8 w-8" />
-          </div>
-        </Anim>
-      </div>
-    ),
+        </div>
+      );
+    },
   },
 
   // 8 — Making decisions
