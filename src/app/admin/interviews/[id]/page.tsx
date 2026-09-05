@@ -19,7 +19,7 @@ export default async function InterviewDetailPage({ params }: { params: Promise<
   const detail = await getInterviewDetail(id);
   if (!detail) notFound();
 
-  const { interview, participant, messages, outcome, problemRatings, summary } = detail;
+  const { interview, participant, messages, outcome, problemRatings, summary, quotes } = detail;
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
@@ -50,11 +50,37 @@ export default async function InterviewDetailPage({ params }: { params: Promise<
       <section className="mb-6 rounded-xl bg-white p-4 shadow-sm">
         <h2 className="mb-2 text-sm font-medium text-zinc-900">AI summary</h2>
         {summary ? (
-          <p className="text-sm whitespace-pre-wrap text-zinc-700">{summary.summary_text}</p>
+          <>
+            <p className="mb-3 text-sm whitespace-pre-wrap text-zinc-700">{summary.summary_text}</p>
+            {summary.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {summary.tags.map((tag) => (
+                  <span key={tag} className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </>
         ) : (
-          <p className="text-sm text-zinc-400">Not generated yet.</p>
+          <p className="text-sm text-zinc-400">
+            Not generated yet{interview.status !== "completed" ? " — generated once the interview is completed." : "."}
+          </p>
         )}
       </section>
+
+      {quotes.length > 0 && (
+        <section className="mb-6 rounded-xl bg-white p-4 shadow-sm">
+          <h2 className="mb-2 text-sm font-medium text-zinc-900">Notable quotes</h2>
+          <div className="flex flex-col gap-2">
+            {quotes.map((q) => (
+              <blockquote key={q.id} className="border-l-2 border-zinc-200 pl-3 text-sm text-zinc-700 italic">
+                &ldquo;{q.quote_text}&rdquo;
+              </blockquote>
+            ))}
+          </div>
+        </section>
+      )}
 
       {problemRatings.length > 0 && (
         <section className="mb-6 rounded-xl bg-white p-4 shadow-sm">

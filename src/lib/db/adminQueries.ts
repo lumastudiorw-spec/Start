@@ -129,10 +129,16 @@ export interface InterviewOutcomeRow {
 
 export interface AiSummaryRow {
   summary_text: string;
-  top_problems: unknown;
-  tags: unknown;
+  top_problems: { problemKey: string; rank?: number; confidence: "stated" | "inferred" }[];
+  tags: string[];
   generated_at: string;
   edited_by_human: boolean;
+}
+
+export interface NotableQuoteRow {
+  id: string;
+  quote_text: string;
+  related_problem_id: string | null;
 }
 
 export interface InterviewDetail {
@@ -142,6 +148,7 @@ export interface InterviewDetail {
   outcome: InterviewOutcomeRow | null;
   problemRatings: ProblemRatingWithLabel[];
   summary: AiSummaryRow | null;
+  quotes: NotableQuoteRow[];
 }
 
 export async function getInterviewDetail(id: string): Promise<InterviewDetail | null> {
@@ -151,25 +158,33 @@ export async function getInterviewDetail(id: string): Promise<InterviewDetail | 
   if (interviewError) throw new Error(`Failed to load interview: ${interviewError.message}`);
   if (!interview) return null;
 
-  const [{ data: participant, error: participantError }, messages, { data: outcome, error: outcomeError }, { data: ratings, error: ratingsError }, { data: summary, error: summaryError }] =
-    await Promise.all([
-      db.from("participants").select().eq("id", interview.participant_id).single(),
-      getMessages(id),
-      db.from("interview_outcomes").select().eq("interview_id", id).maybeSingle(),
-      db
-        .from("interview_problem_ratings")
-        .select(
-          "id, rank, frequency, time_lost, financial_consequence, current_workaround, existing_software, satisfaction, urgency, source, problems(key, label)",
-        )
-        .eq("interview_id", id)
-        .order("rank", { ascending: true }),
-      db.from("ai_summaries").select().eq("interview_id", id).order("generated_at", { ascending: false }).limit(1).maybeSingle(),
-    ]);
+  const [
+    { data: participant, error: participantError },
+    messages,
+    { data: outcome, error: outcomeError },
+    { data: ratings, error: ratingsError },
+    { data: summary, error: summaryError },
+    { data: quotes, error: quotesError },
+  ] = await Promise.all([
+    db.from("participants").select().eq("id", interview.participant_id).single(),
+    getMessages(id),
+    db.from("interview_outcomes").select().eq("interview_id", id).maybeSingle(),
+    db
+      .from("interview_problem_ratings")
+      .select(
+        "id, rank, frequency, time_lost, financial_consequence, current_workaround, existing_software, satisfaction, urgency, source, problems(key, label)",
+      )
+      .eq("interview_id", id)
+      .order("rank", { ascending: true }),
+    db.from("ai_summaries").select().eq("interview_id", id).order("generated_at", { ascending: false }).limit(1).maybeSingle(),
+    db.from("notable_quotes").select("id, quote_text, related_problem_id").eq("interview_id", id),
+  ]);
 
   if (participantError) throw new Error(`Failed to load participant: ${participantError.message}`);
   if (outcomeError) throw new Error(`Failed to load outcome: ${outcomeError.message}`);
   if (ratingsError) throw new Error(`Failed to load problem ratings: ${ratingsError.message}`);
   if (summaryError) throw new Error(`Failed to load summary: ${summaryError.message}`);
+  if (quotesError) throw new Error(`Failed to load quotes: ${quotesError.message}`);
 
   return {
     interview: interview as InterviewRow,
@@ -191,5 +206,78 @@ export async function getInterviewDetail(id: string): Promise<InterviewDetail | 
       source: r.source,
     })),
     summary: (summary as AiSummaryRow) ?? null,
+    quotes: (quotes ?? []) as NotableQuoteRow[],
   };
+}
+
+export const EXPORT_COLUMNS = [
+  "interview_id",
+  "status",
+  "started_at",
+  "completed_at",
+  "first_name",
+  "business_name",
+  "role",
+  "years_experience",
+  "team_size_band",
+  "work_type",
+  "tools",
+  "contact_method",
+  "contact_value",
+  "follow_up_consent",
+  "prototype_consent",
+  "top_problems",
+  "will_call_20min",
+  "will_show_process",
+  "will_test_prototype",
+  "will_test_anon_jobs",
+  "will_pilot",
+  "current_spend",
+  "pay_view",
+  "commitment_strength",
+  "ai_summary",
+  "ai_tags",
+] as const;
+
+/** One flattened row per interview. Fetches full detail per row — fine at this project's scale (tens, not thousands). */
+export async function getInterviewsForExport(): Promise<Record<(typeof EXPORT_COLUMNS)[number], string>[]> {
+  const list = await listInterviews();
+  const rows: Record<(typeof EXPORT_COLUMNS)[number], string>[] = [];
+
+  for (const item of list) {
+    const detail = await getInterviewDetail(item.id);
+    if (!detail) continue;
+    const { interview, participant, outcome, problemRatings, summary } = detail;
+
+    rows.push({
+      interview_id: interview.id,
+      status: interview.status,
+      started_at: interview.started_at,
+      completed_at: interview.completed_at ?? "",
+      first_name: participant.first_name ?? "",
+      business_name: participant.business_name ?? "",
+      role: interview.role ?? "",
+      years_experience: interview.years_experience ?? "",
+      team_size_band: interview.team_size_band ?? "",
+      work_type: interview.work_type ?? "",
+      tools: (interview.current_tools ?? []).join("; "),
+      contact_method: participant.contact_method ?? "",
+      contact_value: participant.contact_value ?? "",
+      follow_up_consent: String(participant.follow_up_consent),
+      prototype_consent: String(participant.prototype_consent),
+      top_problems: problemRatings.map((r) => `${r.problem_key}(#${r.rank ?? "?"})`).join("; "),
+      will_call_20min: outcome?.will_call_20min == null ? "" : String(outcome.will_call_20min),
+      will_show_process: outcome?.will_show_process == null ? "" : String(outcome.will_show_process),
+      will_test_prototype: outcome?.will_test_prototype == null ? "" : String(outcome.will_test_prototype),
+      will_test_anon_jobs: outcome?.will_test_anon_jobs == null ? "" : String(outcome.will_test_anon_jobs),
+      will_pilot: outcome?.will_pilot == null ? "" : String(outcome.will_pilot),
+      current_spend: outcome?.current_spend ?? "",
+      pay_view: outcome?.pay_view ?? "",
+      commitment_strength: outcome?.commitment_strength ?? "",
+      ai_summary: summary?.summary_text ?? "",
+      ai_tags: (summary?.tags ?? []).join("; "),
+    });
+  }
+
+  return rows;
 }

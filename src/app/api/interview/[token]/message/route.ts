@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { getInterviewByResumeToken } from "@/lib/db/interviews";
 import { InterviewApiError, processAnswer } from "@/lib/interviewEngine";
 import { describeCurrentQuestion } from "@/lib/interviewStateMachine";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { generateAndStoreSummary } from "@/lib/anthropic/summary";
 
 const BodySchema = z.object({
   answer: z.string().max(4000).optional().default(""),
@@ -38,6 +39,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
       answerText: parsedBody.data.answer,
       skipped: parsedBody.data.skipped,
     });
+
+    if (result.isTerminal && result.interview.status === "completed") {
+      after(() => generateAndStoreSummary(result.interview.id));
+    }
 
     return NextResponse.json({
       status: result.interview.status,

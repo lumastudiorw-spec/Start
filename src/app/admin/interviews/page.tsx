@@ -19,9 +19,14 @@ export default async function AdminInterviewsPage({
     <main className="mx-auto max-w-3xl px-6 py-10">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-lg font-semibold text-zinc-900">Interviews ({interviews.length})</h1>
-        <Link href="/admin" className="text-sm text-zinc-400 underline">
-          ← Overview
-        </Link>
+        <div className="flex items-center gap-4">
+          <a href="/api/admin/export" className="text-sm text-zinc-900 underline">
+            Export CSV
+          </a>
+          <Link href="/admin" className="text-sm text-zinc-400 underline">
+            ← Overview
+          </Link>
+        </div>
       </div>
 
       <form className="mb-6 flex flex-wrap gap-3 text-sm">
