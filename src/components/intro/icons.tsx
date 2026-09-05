@@ -104,11 +104,11 @@ export function ContactCardIcon({ color = COLORS.customer, className }: IconProp
   );
 }
 
-export function ContainerIcon({ color = COLORS.system, className }: IconProps) {
+export function CheckBadgeIcon({ color = COLORS.system, className }: IconProps) {
   return (
     <svg viewBox="0 0 40 40" className={className} aria-hidden>
-      <rect x={4} y={4} width={32} height={32} rx={6} fill="none" stroke={color} strokeWidth={3} strokeDasharray="6 4" />
-      <circle cx={20} cy={20} r={7} fill={color} />
+      <circle cx={20} cy={20} r={18} fill={color} />
+      <path d="M12 20 L17 25 L28 14" fill="none" stroke={COLORS.background} strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

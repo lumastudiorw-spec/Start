@@ -5,9 +5,9 @@ import { Character } from "./Character";
 import {
   CalendarIcon,
   ChartBoardIcon,
+  CheckBadgeIcon,
   ClockIcon,
   ContactCardIcon,
-  ContainerIcon,
   DocumentIcon,
   MagnifyingGlassIcon,
   MessageIcon,
@@ -65,7 +65,7 @@ export interface Scene {
 export const SCENES: Scene[] = [
   // 1 — Introduction
   {
-    durationMs: 5000,
+    durationMs: 3000,
     caption: "Hi, this is Marbury Studios.",
     render: (settled) => (
       <div className="flex h-full items-center justify-center">
@@ -78,7 +78,7 @@ export const SCENES: Scene[] = [
 
   // 2 — What the company does
   {
-    durationMs: 8000,
+    durationMs: 5000,
     caption: "We're a UK-based company that creates practical solutions to real-world problems.",
     render: (settled) => {
       const icons = [PhoneIcon, DocumentIcon, ClockIcon, MessageIcon, CalendarIcon];
@@ -112,7 +112,13 @@ export const SCENES: Scene[] = [
       "We look for areas where people are losing time or relying on systems that could be simpler. One area we're researching now is the plumbing industry.",
     render: (settled) => (
       <div className="flex h-full items-center justify-center gap-6">
-        <Anim settled={settled} from={{ opacity: 1, scale: 1 }} to={{ opacity: 0, scale: 0.7 }} className="flex flex-col items-center gap-2">
+        <Anim
+          settled={settled}
+          from={{ opacity: 1, scale: 1 }}
+          to={{ opacity: 0, scale: 0.7 }}
+          delayMs={2500}
+          className="flex flex-col items-center gap-2"
+        >
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-sm">
             <ClockIcon className="h-10 w-10" />
           </div>
@@ -122,6 +128,7 @@ export const SCENES: Scene[] = [
           settled={settled}
           from={{ opacity: 1, scale: 1.15 }}
           to={{ opacity: 1, scale: 1.5 }}
+          delayMs={2500}
           className="flex flex-col items-center gap-2"
         >
           <div className="flex h-28 w-28 items-center justify-center rounded-full shadow-md" style={{ backgroundColor: COLORS.background, border: `3px solid ${COLORS.plumber}` }}>
@@ -129,7 +136,13 @@ export const SCENES: Scene[] = [
           </div>
           <span className="text-xs font-medium text-zinc-700">Plumbing</span>
         </Anim>
-        <Anim settled={settled} from={{ opacity: 1, scale: 1 }} to={{ opacity: 0, scale: 0.7 }} className="flex flex-col items-center gap-2">
+        <Anim
+          settled={settled}
+          from={{ opacity: 1, scale: 1 }}
+          to={{ opacity: 0, scale: 0.7 }}
+          delayMs={2500}
+          className="flex flex-col items-center gap-2"
+        >
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-sm">
             <MagnifyingGlassIcon className="h-10 w-10" />
           </div>
@@ -145,19 +158,20 @@ export const SCENES: Scene[] = [
     caption:
       "Our aim is to take repetitive admin off plumbers' hands — from enquiries and job details to quotes and follow-ups.",
     render: (settled) => {
-      const icons = [PhoneIcon, MessageIcon, DocumentIcon, ClockIcon, CalendarIcon];
+      const icons = [PhoneIcon, MessageIcon, DocumentIcon, ClockIcon];
       // Kept within +-100x/+-55y so nothing clips the aspect-video frame at
-      // phone widths, where the box is much shorter than it is wide.
+      // phone widths, where the box is much shorter than it is wide. All
+      // four corners, deliberately none above center — that's where the
+      // character's head is.
       const positions = [
-        { x: -100, y: -50 },
-        { x: 100, y: -50 },
-        { x: -115, y: 45 },
-        { x: 115, y: 45 },
-        { x: 0, y: -62 },
+        { x: -100, y: -55 },
+        { x: 100, y: -55 },
+        { x: -100, y: 55 },
+        { x: 100, y: 55 },
       ];
       return (
         <div className="relative flex h-full items-center justify-center">
-          <Character role="plumber" holdingTool leftArmAngle={-15} rightArmAngle={20} className="h-28 w-28" />
+          <Character role="plumber" leftArmAngle={-15} rightArmAngle={20} className="h-28 w-28" />
           {icons.map((Icon, i) => (
             <Anim
               key={i}
@@ -182,22 +196,10 @@ export const SCENES: Scene[] = [
     durationMs: 7000,
     caption: "Less repetitive admin.",
     render: (settled) => (
-      <div className="relative flex h-full items-center justify-center">
-        <Anim settled={settled} from={{ opacity: 1, x: -50 }} to={{ opacity: 1, x: -100 }}>
-          <Character role="plumber" leftArmAngle={-10} className="h-28 w-28" />
-        </Anim>
-        <Anim
-          settled={settled}
-          from={{ opacity: 0, scale: 0.6, x: 50 }}
-          to={{ opacity: 1, scale: 1, x: 50 }}
-          className="absolute"
-        >
-          <div
-            className="flex h-28 w-28 items-center justify-center rounded-2xl"
-            style={{ border: `3px dashed ${COLORS.system}` }}
-          >
-            <ContainerIcon className="h-12 w-12" />
-          </div>
+      <div className="relative flex h-full items-center justify-center gap-10">
+        <Character role="plumber" leftArmAngle={-10} className="h-28 w-28" />
+        <Anim settled={settled} from={{ opacity: 0, scale: 0.5 }} to={{ opacity: 1, scale: 1 }} delayMs={300}>
+          <CheckBadgeIcon className="h-14 w-14" />
         </Anim>
       </div>
     ),
@@ -282,7 +284,7 @@ export const SCENES: Scene[] = [
     render: (settled) => (
       <div className="flex h-full flex-col items-center justify-center gap-4">
         <Anim settled={settled} from={{ opacity: 0.5, scale: 0.9 }} to={{ opacity: 1, scale: 1 }}>
-          <Character role="plumber" holdingTool rightArmAngle={-25} className="h-32 w-32" />
+          <Character role="plumber" rightArmAngle={-25} className="h-32 w-32" />
         </Anim>
         <Anim settled={settled} from={{ opacity: 0 }} to={{ opacity: 1 }} delayMs={400}>
           <span className="text-sm font-semibold tracking-wide text-zinc-700">Help us build it properly</span>
