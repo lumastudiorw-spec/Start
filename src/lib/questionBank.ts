@@ -30,13 +30,12 @@ function q(
 }
 
 // --- 0. Intro & consent -----------------------------------------------
+// The general "what is this, how long, not a sales call" framing is now
+// delivered by the intro video (see IntroVideoGate) instead of text — but
+// the confidentiality warning stays as text regardless, since it shouldn't
+// depend on someone having watched/heard the video.
 
 export const INTRO_STEPS: QuestionDef[] = [
-  q(
-    "INTRO_1",
-    "Hiya — thanks for taking the time. We're researching how plumbing businesses manage enquiries, quotes and everyday admin. This isn't a sales call, and there's nothing to buy. It should take about 10 minutes, and what you tell us helps us work out what's actually worth building.",
-    { kind: "statement", skippable: false },
-  ),
   q(
     "INTRO_2",
     "One thing first — please don't mention any customers' names, addresses or other private details. General descriptions are perfect.",

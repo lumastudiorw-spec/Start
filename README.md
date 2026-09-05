@@ -36,6 +36,9 @@ to Vercel.
   AI tagging prompt.
 - `supabase/migrations/` — SQL schema, applied manually via the Supabase
   SQL editor (see Setup above).
+- `public/video/intro.mp4` — the intro video shown before consent (see
+  `public/video/README.md`). Not committed yet; the app shows a "coming
+  soon" placeholder and a Continue button until it's added.
 
 ## Commands
 

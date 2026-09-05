@@ -37,7 +37,6 @@ export interface AdvanceEvent {
 // The linear script, excluding the dynamic problem-deep-dive loop and the
 // conditional contact-detail steps — those are spliced in at runtime.
 const BASE_SPINE: string[] = [
-  "INTRO_1",
   "INTRO_2",
   "CONSENT_Q",
   "SCR_NAME",

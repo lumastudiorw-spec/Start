@@ -24,7 +24,6 @@ function assert(cond: boolean, msg: string) {
 // --- Path 1: decline at consent ---
 {
   let state = createInitialState();
-  state = advance(state); // leave INTRO_1
   state = advance(state); // leave INTRO_2
   assert(state.stepId === "CONSENT_Q", "reaches CONSENT_Q");
   state = advance(state, { consentAnswer: false });
@@ -36,7 +35,6 @@ function assert(cond: boolean, msg: string) {
 {
   let state = createInitialState();
   const steps: string[] = [state.stepId];
-  state = advance(state); // INTRO_1 -> INTRO_2
   state = advance(state); // INTRO_2 -> CONSENT_Q
   assert(state.stepId === "CONSENT_Q", "reaches CONSENT_Q on path 2");
   state = advance(state, { consentAnswer: true }); // CONSENT_Q -> SCR_NAME

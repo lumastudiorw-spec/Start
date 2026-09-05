@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import IntroVideoGate from "@/components/IntroVideoGate";
 
 interface ChatMessage {
   role: "bot" | "user";
@@ -30,6 +31,7 @@ export default function InterviewChat({ token, status: initialStatus, currentQue
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deleted, setDeleted] = useState(false);
+  const [introDone, setIntroDone] = useState(initialMessages.length > 0);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -94,6 +96,10 @@ export default function InterviewChat({ token, status: initialStatus, currentQue
         <p className="text-sm text-zinc-500">Done — everything you told us has been deleted.</p>
       </main>
     );
+  }
+
+  if (!introDone) {
+    return <IntroVideoGate onDone={() => setIntroDone(true)} />;
   }
 
   return (
