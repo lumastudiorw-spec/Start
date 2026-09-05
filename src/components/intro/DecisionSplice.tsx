@@ -17,12 +17,12 @@ const STYLES: Record<"build" | "prioritise" | "leaveOut", Record<Stage, GroupSty
   build: {
     stack: { x: 0, y: 0, opacity: 0, scale: 0.8, labelOpacity: 0 },
     split: { x: -90, y: 0, opacity: 1, scale: 1, labelOpacity: 1 },
-    merge: { x: 0, y: 15, opacity: 1, scale: 0.82, labelOpacity: 0 },
+    merge: { x: 0, y: 0, opacity: 0, scale: 0.55, labelOpacity: 0 },
   },
   prioritise: {
     stack: { x: 0, y: 0, opacity: 0, scale: 0.8, labelOpacity: 0 },
     split: { x: 0, y: 0, opacity: 1, scale: 1, labelOpacity: 1 },
-    merge: { x: 0, y: -15, opacity: 1, scale: 0.82, labelOpacity: 0 },
+    merge: { x: 0, y: 0, opacity: 0, scale: 0.55, labelOpacity: 0 },
   },
   leaveOut: {
     stack: { x: 0, y: 0, opacity: 0, scale: 0.8, labelOpacity: 0 },
@@ -62,6 +62,23 @@ function Group({ group, stage }: { group: "build" | "prioritise" | "leaveOut"; s
       >
         {LABELS[group]}
       </span>
+    </div>
+  );
+}
+
+/** What build + prioritise converge into — one card, not two overlapping ones. */
+function MergedBlock({ visible }: { visible: boolean }) {
+  return (
+    <div
+      className="absolute flex h-20 w-16 flex-col items-center justify-center gap-1.5 rounded-xl bg-white p-2 shadow-sm"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: `scale(${visible ? 1 : 0.85})`,
+        transition: "opacity 0.9s ease-in-out 0.5s, transform 0.9s ease-in-out 0.5s",
+      }}
+    >
+      <div className="h-2.5 w-10 rounded" style={{ backgroundColor: COLORS.plumber }} />
+      <div className="h-2.5 w-10 rounded" style={{ backgroundColor: COLORS.system }} />
     </div>
   );
 }
@@ -115,6 +132,7 @@ export default function DecisionSplice({ active }: { active: boolean }) {
       <Group group="build" stage={stage} />
       <Group group="prioritise" stage={stage} />
       <Group group="leaveOut" stage={stage} />
+      <MergedBlock visible={stage === "merge"} />
     </div>
   );
 }
